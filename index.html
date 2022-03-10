@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JANRAX SIMULATOR</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+
+<body id="app">
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <button class=".btn btn-primary" @click="cambiaBD"><i class="bi bi-arrow-clockwise"></i></button>
+                    <label for="VisorBD" class="form-label mt-4">Visor de BD {{jsonError}}</label>
+                    <textarea class="form-control" id="VisorBD" v-model="baseDatosJson" rows="35"></textarea>
+                </div>
+            </div>
+            <div class="col">
+                <div>{{ baseDatos }}</div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    message: 'Hello Vue!',
+                    //Default DB
+                    baseDatos: {
+                        "jsonError": "",
+                        "descargas": {
+                            "A40001": {
+                                "muelle": 12, "pedidos": {
+                                    "P0011": {
+                                        "articulo": "00010-0",
+                                        "cantidad": 10,
+                                        "formato:": "C"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    baseDatosJson: {},
+                }
+            },
+            methods: {
+                cambiaBD() {
+                    this.baseDatos.descargas.A40001.pedidos.P0011.articulo = "cambio prueba"
+                    this.baseDatosJson = JSON.stringify(this.baseDatos, null, 4)
+                },
+                updateVisorBD() {
+                    this.baseDatosJson = JSON.stringify(this.baseDatos, null, 4)
+                    // this.baseDatosJson = JSON.stringify(this.baseDatos)
+                }
+            },
+            mounted() {
+                this.updateVisorBD()
+            },
+            watch: {
+                baseDatosJson: function (newJson) {
+                    try {
+                        let validJson = JSON.parse(newJson)
+                        this.baseDatos = validJson
+                        this.jsonError = ""
+                    } catch (err) {
+                        console.log("ERR: " + err)
+                        this.jsonError = "ERR: " + err
+                    }
+                }
+            }
+        }).mount('#app')
+    </script>
+
+</body>
