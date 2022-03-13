@@ -23,30 +23,179 @@
                 </div>
             </div>
             <div class="col">
-                <div>{{ baseDatos }}</div>
+                <div class="container-fluid">
+
+
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">Navbar</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+                                aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse" id="navbarColor01">
+                                <ul class="navbar-nav me-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#">Home
+                                            <span class="visually-hidden">(current)</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Features</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Pricing</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">About</a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                                            role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Separated link</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <form class="d-flex">
+                                    <input class="form-control me-sm-2" type="text" placeholder="Search">
+                                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                    </nav>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group row">
+                                    <div class="form-group">
+                                        <label for="exampleSelect1" class="form-label mt-4">Muelle</label>
+                                        <select class="form-select" id="exampleSelect1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descargaSelect" class="form-label mt-4">Descarga</label>
+                                        <select class="form-select" id="descargaSelect" v-model="descargaSelected">
+                                            <option v-for="option in descargaSelectOptions" :value="option">
+                                                {{option}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleSelect1" class="form-label mt-4">Pedido</label>
+                                        <select class="form-select" id="exampleSelect1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleSelect1" class="form-label mt-4">Articulo</label>
+                                        <select class="form-select" id="exampleSelect1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div>{{ baseDatos }}</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
             </div>
         </div>
 
     </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 
     <script src="https://unpkg.com/vue@3"></script>
     <script>
         Vue.createApp({
             data() {
-                return {
-                    message: 'Hello Vue!',
+                return {                    
+                    descargaSelectOptions: ["uno", "dos", "tres"],
+                    descargaSelected: '',
                     //Default DB
                     baseDatos: {
                         "jsonError": "",
                         "descargas": {
                             "A40001": {
-                                "muelle": 12, "pedidos": {
+                                "muelle": 12,
+                                "pedidos": {
                                     "P0011": {
-                                        "articulo": "00010-0",
-                                        "cantidad": 10,
-                                        "formato:": "C"
+                                        "lineas": {
+                                            "00010-0": {
+                                                "articulo": "00010-0",
+                                                "cantidad": 10,
+                                                "formato:": "C"
+                                            }
+                                        }
+                                    },
+                                    "P0021": {
+                                        "lineas": {
+                                            "00021-0": {
+                                                "articulo": "00021-0",
+                                                "cantidad": 21,
+                                                "formato:": "C"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "A40002": {
+                                "muelle": 13,
+                                "pedidos": {
+                                    "P0011": {
+                                        "lineas": {
+                                            "00011-0": {
+                                                "articulo": "00011-0",
+                                                "cantidad": 9,
+                                                "formato:": "C"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "A40003": {
+                                "muelle": 14,
+                                "pedidos": {
+                                    "P0012": {
+                                        "lineas": {
+                                            "00012-0": {
+                                                "articulo": "00012-0",
+                                                "cantidad": 8,
+                                                "formato:": "C"
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -63,6 +212,11 @@
                 updateVisorBD() {
                     this.baseDatosJson = JSON.stringify(this.baseDatos, null, 4)
                     // this.baseDatosJson = JSON.stringify(this.baseDatos)
+                },
+                getCandidatesDescargas() {
+                    console.log(Object.keys(this.baseDatos.descargas).sort())
+                    this.descargaSelectOptions = Object.keys(this.baseDatos.descargas).sort()
+                    this.descargaSelectOptions.unshift("SELECCIONAR")
                 }
             },
             mounted() {
@@ -74,6 +228,7 @@
                         let validJson = JSON.parse(newJson)
                         this.baseDatos = validJson
                         this.jsonError = ""
+                        this.getCandidatesDescargas()
                     } catch (err) {
                         console.log("ERR: " + err)
                         this.jsonError = "ERR: " + err
