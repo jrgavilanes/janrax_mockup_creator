@@ -15,119 +15,252 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-4">
+
+            <!-- Login -->
+            <div v-if="pantalla_actual=='login'" class="col-12">
+                <div class="container-fluid min-vh-100">
+                    <div class="col-12">
+                        <div class="container">
+                            <div class="col-6 offset-3">
+                                <h1 class="text-center">Login</h1>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="form-label mt-4">Usuario</label>
+                                    <input type="text" v-model="usuario" class="form-control" id="exampleInputEmail1"
+                                        aria-describedby="emailHelp" placeholder="Usuario ofidona">
+                                    <small id="emailHelp" class="form-text text-muted">usuario ofidona</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
+                                    <input type="password" v-model="password" class="form-control"
+                                        id="exampleInputPassword1" placeholder="Password">
+                                </div>
+                                <div class="form-group mt-5">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <div class="btn btn-primary" @click="validaUsuario()">Entrar</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Login -->
+
+
+            <!-- Elige almacén -->
+            <div v-if="pantalla_actual=='elige_almacen'" class="col-12">
+                <div class="container-fluid min-vh-100">
+                    <div class="col-12">
+                        <div class="container">
+                            <div class="col-6 offset-3">
+                                <h1 class="text-center">Elige Almacén</h1>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-lg btn-primary mt-4" type="button"
+                                        @click="eligeAlmacen('A1018 - Villadangos Secos')">A1018 - Villadangos
+                                        Secos</button>
+                                    <button class="btn btn-lg btn-success mt-4" type="button"
+                                        @click="eligeAlmacen('A1019 - Villadangos Frío')">A1019 - Villadangos
+                                        Frío</button>
+                                </div>
+                                <div class="form-group mt-5">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                        <div class="btn btn-danger" @click="pantalla_actual='login'">Salir</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Elige almacén -->
+
+
+            <!-- Menú principal -->
+            <div v-if="pantalla_actual=='menu_principal'" class="col-12">
+                <div class="container-fluid min-vh-100">
+                    <div class="col-12 mb-4">
+                        <div class="row">
+                            <div class="col">Terminal: {{terminal}} - Usuario: {{usuario}}</div>
+                            <div class="col text-center">** Código Pantalla: {{pantalla_actual}} **</div>
+                            <div class="col text-end">Almacén: {{almacen}}</div>
+                        </div>
+                        <div class="row">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="container">
+                            <div class="col-md-6 offset-md-3">
+                                <h1 class="text-center">Menú principal</h1>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-lg btn-primary mt-2" type="button"
+                                        @click="asignacionAutomatica()">ASIGNACIÓN AUTOMÁTICA</button>
+                                    <button class="btn btn-lg btn-success mt-2" type="button">ENTRADA DIRECTA</button>
+                                    <button class="btn btn-lg btn-info mt-2" type="button">SOLICITAR REPOSICIÓN</button>
+                                    <button class="btn btn-lg btn-warning mt-2" type="button">REPOSICIÓN
+                                        DIRECTA</button>
+                                    <button class="btn btn-lg btn-danger mt-2" type="button">ORGANIZAR HUECO</button>
+                                    <button class="btn btn-lg btn-light mt-2" type="button">SACAR PALETA A
+                                        MUELLE</button>
+                                    <button class="btn btn-lg btn-warning mt-2" type="button">CONSULTAR PALETA</button>
+                                    <button class="btn btn-lg btn-dark mt-2" type="button"
+                                        @click="pantalla_actual='elige_almacen'">SALIR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Menú principal -->
+
+
+            <!-- Entradas paletas -->
+            <div v-if="pantalla_actual=='entrada_paletas'" class="col-12">
+                <div class="container-fluid min-vh-100">
+                    <div class="col-12 mb-4">
+                        <div class="row">
+                            <div class="col">Terminal: {{terminal}} - Usuario: {{usuario}}</div>
+                            <div class="col text-center">** Código Pantalla: {{pantalla_actual}} **</div>
+                            <div class="col text-end">Almacén: {{almacen}}</div>
+                        </div>
+                        <div class="row">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="container">
+                            <div class="col-md-6 offset-md-3">
+                                <h1 class="text-center">MUELLE {{muelle}}</h1>
+                                <div v-if="es_etiqueta_negra" class="text-center">
+                                    <br>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
+                                        class="bi bi-bookmark-star" viewBox="0 0 16 16">
+                                        <path
+                                            d="M7.84 4.1a.178.178 0 0 1 .32 0l.634 1.285a.178.178 0 0 0 .134.098l1.42.206c.145.021.204.2.098.303L9.42 6.993a.178.178 0 0 0-.051.158l.242 1.414a.178.178 0 0 1-.258.187l-1.27-.668a.178.178 0 0 0-.165 0l-1.27.668a.178.178 0 0 1-.257-.187l.242-1.414a.178.178 0 0 0-.05-.158l-1.03-1.001a.178.178 0 0 1 .098-.303l1.42-.206a.178.178 0 0 0 .134-.098L7.84 4.1z" />
+                                        <path
+                                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
+                                    </svg>
+                                    <p>Producto en falta, recepcionar urgentemente!</p>
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <div class="form-group">
+                                        <div class="input-group mt-5">
+                                            <input type="text" class="form-control" v-model="paleta1_muelle"
+                                                placeholder="Escanea paleta del muelle"
+                                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                                            <button class="btn btn-primary" type="button" id="button-addon2"
+                                                @click="paleta1_muelle=paleta1_muelle_candidata">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                    fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z" />
+                                                    <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z" />
+                                                    <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z" />
+                                                    <path
+                                                        d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z" />
+                                                    <path d="M12 9h2V8h-2v1Z" />
+                                                </svg></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-4">
+                                    <div class="form-group">
+                                        <div class="input-group mt-5">
+                                            <input type="text" class="form-control" v-model="paleta2_muelle"
+                                                placeholder="Escanea paleta del muelle"
+                                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                                            <button class="btn btn-primary" type="button" id="button-addon2"
+                                                @click="paleta2_muelle=paleta2_muelle_candidata">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                    fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z" />
+                                                    <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z" />
+                                                    <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z" />
+                                                    <path
+                                                        d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z" />
+                                                    <path d="M12 9h2V8h-2v1Z" />
+                                                </svg></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-5">
+                                    <div class="col">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <div class="btn btn-secondary" @click="volverDeMuelleAPrincipal()">Atrás
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <div class="btn btn-primary" @click="pantalla_actual='confirmar_ubicacion'">
+                                                Ubicar</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Entradas paletas -->
+
+
+
+            <!-- Confirmar ubicación -->
+            <div v-if="pantalla_actual=='confirmar_ubicacion'" class="col-12">
+                <div class="container-fluid min-vh-100">
+                    <div class="col-12 mb-4">
+                        <div class="row">
+                            <div class="col">Terminal: {{terminal}} - Usuario: {{usuario}}</div>
+                            <div class="col text-center">** Código Pantalla: {{pantalla_actual}} **</div>
+                            <div class="col text-end">Almacén: {{almacen}}</div>
+                        </div>
+                        <div class="row">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="container">
+                            <div class="col-md-6 offset-md-3">
+                                <h1 class="text-center">Confirmar ubicación</h1>                                
+
+                                <div class="row mt-5">
+                                    <div class="col">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <div class="btn btn-secondary" @click="volverDeMuelleAPrincipal()">Atrás
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <div class="btn btn-primary" @click="">Ubicar</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Confirmar ubicación -->
+
+
+
+
+            <!-- Visor JSON -->
+            <div class="col-12">
                 <div class="form-group">
-                    <button class=".btn btn-primary" @click="cambiaBD"><i class="bi bi-arrow-clockwise"></i></button>
+                    <button class=".btn btn-primary"><i class="bi bi-arrow-clockwise"></i></button>
                     <label for="VisorBD" class="form-label mt-4">Visor de BD {{jsonError}}</label>
                     <textarea class="form-control" id="VisorBD" v-model="baseDatosJson" rows="35"></textarea>
                 </div>
             </div>
-            <div class="col">
-                <div class="container-fluid">
 
-
-                    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                        <div class="container-fluid">
-                            <a class="navbar-brand" href="#">Navbar</a>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-
-                            <div class="collapse navbar-collapse" id="navbarColor01">
-                                <ul class="navbar-nav me-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#">Home
-                                            <span class="visually-hidden">(current)</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Features</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Pricing</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">About</a>
-                                    </li>
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
-                                            role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Separated link</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <form class="d-flex">
-                                    <input class="form-control me-sm-2" type="text" placeholder="Search">
-                                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                                </form>
-                            </div>
-                        </div>
-                    </nav>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-3">
-                                <div class="form-group row">
-                                    <div class="form-group">
-                                        <label for="exampleSelect1" class="form-label mt-4">Muelle</label>
-                                        <select class="form-select" id="exampleSelect1">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="descargaSelect" class="form-label mt-4">Descarga</label>
-                                        <select class="form-select" id="descargaSelect" v-model="descargaSelected">
-                                            <option v-for="option in descargaSelectOptions" :value="option">
-                                                {{option}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleSelect1" class="form-label mt-4">Pedido</label>
-                                        <select class="form-select" id="exampleSelect1">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleSelect1" class="form-label mt-4">Articulo</label>
-                                        <select class="form-select" id="exampleSelect1">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div>{{ baseDatos }}</div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-
-                </div>
-
-
-            </div>
         </div>
 
     </div>
@@ -141,82 +274,130 @@
     <script>
         Vue.createApp({
             data() {
-                return {                    
-                    descargaSelectOptions: ["uno", "dos", "tres"],
-                    descargaSelected: '',
-                    //Default DB
+                return {
+                    usuario: "juanra",
+                    password: "juanra",
+                    terminal: 365,
+                    almacen: "",
+                    pantalla_actual: "login",
+                    muelle_actual: "",
+                    paleta1_muelle: "",
+                    paleta2_muelle: "",
+                    paleta1_muelle_candidata: "",
+                    paleta2_muelle_candidata: "",
+                    es_etiqueta_negra: false,
                     baseDatos: {
                         "jsonError": "",
-                        "descargas": {
-                            "A40001": {
-                                "muelle": 12,
-                                "pedidos": {
-                                    "P0011": {
-                                        "lineas": {
-                                            "00010-0": {
-                                                "articulo": "00010-0",
-                                                "cantidad": 10,
-                                                "formato:": "C"
-                                            }
-                                        }
-                                    },
-                                    "P0021": {
-                                        "lineas": {
-                                            "00021-0": {
-                                                "articulo": "00021-0",
-                                                "cantidad": 21,
-                                                "formato:": "C"
-                                            }
-                                        }
-                                    }
-                                }
+                        "orden": {
+                            "muelle": "",
+                            "paleta": {},
+                        },
+                        "paletas": {
+                            "111111": {
+                                "pal_codigo": "111111",
+                                "pal_sitpal": "ED",
+                                "pal_muelle": "9",
+                                "pal_articulo": "12345-0",
+                                "pal_unidades": 1000,
+                                "pal_etiqueta_negra": true
                             },
-                            "A40002": {
-                                "muelle": 13,
-                                "pedidos": {
-                                    "P0011": {
-                                        "lineas": {
-                                            "00011-0": {
-                                                "articulo": "00011-0",
-                                                "cantidad": 9,
-                                                "formato:": "C"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "A40003": {
-                                "muelle": 14,
-                                "pedidos": {
-                                    "P0012": {
-                                        "lineas": {
-                                            "00012-0": {
-                                                "articulo": "00012-0",
-                                                "cantidad": 8,
-                                                "formato:": "C"
-                                            }
-                                        }
-                                    }
-                                }
+                            "222222": {
+                                "pal_codigo": "222222",
+                                "pal_sitpal": "ED",
+                                "pal_muelle": "10",
+                                "pal_articulo": "12346-0",
+                                "pal_unidades": 2000,
+                                "pal_etiqueta_negra": false
                             }
+                        },
+                        "articulos": {
+                            "12345-0": {
+                                art_codigo: "12345-0",
+                                art_pasill: "010",
+                                art_column: "015",
+                                art_altura: "1"
+                            },
+                            "12346-0": {
+                                art_codigo: "12346-0",
+                                art_pasill: "009",
+                                art_column: "020",
+                                art_altura: "1"
+                            }
+                        },
+                        "ubic_picking": {
+                            "010-015-1": {
+                                cod_ubic: "010-015-1",
+                                cod_paleta: "",
+                                ubic_situacion: "DL"
+                            },
+                            "009-020-1": {
+                                cod_ubic: "009-020-1",
+                                cod_paleta: "",
+                                ubic_situacion: "DL"
+                            },
                         }
                     },
                     baseDatosJson: {},
                 }
             },
             methods: {
-                cambiaBD() {
-                    this.baseDatos.descargas.A40001.pedidos.P0011.articulo = "cambio prueba"
-                    this.baseDatosJson = JSON.stringify(this.baseDatos, null, 4)
+                validaUsuario() {
+                    if (this.usuario === this.password) {
+                        this.pantalla_actual = "elige_almacen"
+                    } else {
+                        alert("Usuario incorrecto")
+                    }
+                },
+                eligeAlmacen(codigo) {
+                    this.almacen = codigo
+                    this.pantalla_actual = 'menu_principal'
+                },
+                asignacionAutomatica() {
+                    //Ordenes de entrada
+                    //let result = this.baseDatos.paletas.filter(pal => pal.pal_sitpal === "ED")
+
+                    for (paleta in this.baseDatos.paletas) {
+                        console.log(paleta)
+                        if (this.baseDatos.paletas[paleta].pal_sitpal == "ED") {
+
+                            // this.baseDatos.paletas[paleta].pal_sitpal = "TR"                            
+
+                            let orden = {
+                                "muelle": this.baseDatos.paletas[paleta].pal_muelle,
+                                "paleta": paleta,
+                                "sitord": "PE"
+                            }
+
+                            this.muelle = this.baseDatos.paletas[paleta].pal_muelle
+                            this.es_etiqueta_negra = this.baseDatos.paletas[paleta].pal_etiqueta_negra
+
+                            this.paleta1_muelle_candidata = paleta
+
+                            this.baseDatos.orden = orden
+                            this.pantalla_actual = "entrada_paletas"
+                            break
+
+                        }
+                    }
+
+                    // if (result.length>0) {
+                    //     this.pantalla_actual = "entrada_paletas"
+
+                    // }
+
+                    this.updateVisorBD()
+                },
+                volverDeMuelleAPrincipal() {
+                    this.pal_muelle = ""
+                    this.paleta1_muelle = ""
+                    this.paleta1_muelle_candidata = ""
+                    this.paleta2_muelle = ""
+                    this.paleta2_muelle_candidata = ""
+                    this.pantalla_actual = "menu_principal"
+
                 },
                 updateVisorBD() {
                     this.baseDatosJson = JSON.stringify(this.baseDatos, null, 4)
-                    // this.baseDatosJson = JSON.stringify(this.baseDatos)
-                },
-                getCandidatesDescargas() {
-                    console.log(Object.keys(this.baseDatos.descargas).sort())
-                    this.descargaSelectOptions = Object.keys(this.baseDatos.descargas).sort()
-                    this.descargaSelectOptions.unshift("SELECCIONAR")
                 }
             },
             mounted() {
@@ -227,8 +408,8 @@
                     try {
                         let validJson = JSON.parse(newJson)
                         this.baseDatos = validJson
-                        this.jsonError = ""
-                        this.getCandidatesDescargas()
+                        this.jsonError = "json OK"
+
                     } catch (err) {
                         console.log("ERR: " + err)
                         this.jsonError = "ERR: " + err
