@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JANRAX SIMULATOR</title>
+    <title>APP Ubicación</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
@@ -34,9 +34,21 @@
                                     <input type="password" v-model="password" class="form-control"
                                         id="exampleInputPassword1" placeholder="Password">
                                 </div>
-                                <div class="form-group mt-5">
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <div class="btn btn-primary" @click="validaUsuario()">Entrar</div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group mt-5">
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                                <div class="btn btn-secondary" @click="pantalla_actual='elige_almacen'">
+                                                    Seleccionar almacén</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group mt-5">
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="btn btn-primary" @click="validaUsuario()">Entrar</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -61,12 +73,7 @@
                                     <button class="btn btn-lg btn-success mt-4" type="button"
                                         @click="eligeAlmacen('A1019 - Villadangos Frío')">A1019 - Villadangos
                                         Frío</button>
-                                </div>
-                                <div class="form-group mt-5">
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                                        <div class="btn btn-danger" @click="pantalla_actual='login'">Salir</div>
-                                    </div>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -104,7 +111,7 @@
                                         MUELLE</button>
                                     <button class="btn btn-lg btn-warning mt-2" type="button">CONSULTAR PALETA</button>
                                     <button class="btn btn-lg btn-dark mt-2" type="button"
-                                        @click="pantalla_actual='elige_almacen'">SALIR</button>
+                                        @click="salir()">SALIR</button>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +202,7 @@
                                     </div>
                                     <div class="col">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <div class="btn btn-primary" @click="pantalla_actual='confirmar_ubicacion'">
+                                            <div class="btn btn-primary" @click="gotoUbicar()">
                                                 Ubicar</div>
                                         </div>
                                     </div>
@@ -225,8 +232,129 @@
                     </div>
                     <div class="col-12">
                         <div class="container">
-                            <div class="col-md-6 offset-md-3">
-                                <h1 class="text-center">Confirmar ubicación</h1>                                
+                            <div class="col-md-8 offset-md-2">
+                                <h1 class="text-center">Confirmar ubicación</h1>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Muelle de
+                                                    origen</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.orden.muelle">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Tipo de orden</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.orden.tipo_orden">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Paleta</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.orden.pal_codigo">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Destino</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.orden.destino">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Destino final</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.orden.destino_final">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+
+                                        <div class="input-group mt-5">
+                                            <input type="text" class="form-control" v-model="ubicacion_escaneada"
+                                                placeholder="Escanea ubicación" aria-label="Recipient's username"
+                                                aria-describedby="button-addon2">
+                                            <button class="btn btn-primary" type="button" id="button-addon2"
+                                                @click="ubicacion_escaneada=baseDatos.orden.destino_final">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                    fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z" />
+                                                    <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z" />
+                                                    <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z" />
+                                                    <path
+                                                        d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z" />
+                                                    <path d="M12 9h2V8h-2v1Z" />
+                                                </svg></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <hr>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Articulo</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.articulos[baseDatos.paletas[baseDatos.orden.pal_codigo].pal_articulo].art_codigo">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Denominación</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.articulos[baseDatos.paletas[baseDatos.orden.pal_codigo].pal_articulo].art_denomi">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Cajas en
+                                                    paleta</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.paletas[baseDatos.orden.pal_codigo].pal_cajas">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <fieldset>
+                                                <label class="form-label mt-4" for="readOnlyInput">Unidades en
+                                                    caja</label>
+                                                <input class="form-control" id="readOnlyInput" type="text" readonly=""
+                                                    :placeholder="baseDatos.paletas[baseDatos.orden.pal_codigo].pal_unidades_caja">
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row mt-5">
                                     <div class="col">
@@ -237,7 +365,8 @@
                                     </div>
                                     <div class="col">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <div class="btn btn-primary" @click="">Ubicar</div>
+                                            <div class="btn btn-primary" @click="confirmarUbicacionEntrada()">Confirmar
+                                                ubicación</div>
                                         </div>
                                     </div>
                                 </div>
@@ -248,8 +377,6 @@
                 </div>
             </div>
             <!-- Confirmar ubicación -->
-
-
 
 
             <!-- Visor JSON -->
@@ -279,49 +406,57 @@
                     password: "juanra",
                     terminal: 365,
                     almacen: "",
-                    pantalla_actual: "login",
+                    pantalla_actual: "elige_almacen",
                     muelle_actual: "",
                     paleta1_muelle: "",
                     paleta2_muelle: "",
                     paleta1_muelle_candidata: "",
                     paleta2_muelle_candidata: "",
+                    ubicacion_escaneada: "",
                     es_etiqueta_negra: false,
                     baseDatos: {
                         "jsonError": "",
                         "orden": {
-                            "muelle": "",
-                            "paleta": {},
+                            "tipo_orden": "ENTRADA",
+                            "paleta1_muelle": "",
+                            "paleta2_muelle": "",
+                            "paleta1_muelle_candidata": "",
+                            "paleta2_muelle_candidata": "",
+                            "muelle": "88888",
+                            "pal_codigo": "111111",
+                            "destino": "010-015-1",
+                            "destino_final": "010-015-1"
                         },
                         "paletas": {
-                            "111111": {
-                                "pal_codigo": "111111",
+                            "483800000000123456": {
+                                "pal_codigo": "483800000000123456",
                                 "pal_sitpal": "ED",
                                 "pal_muelle": "9",
                                 "pal_articulo": "12345-0",
-                                "pal_unidades": 1000,
+                                "pal_cajas": 10,
+                                "pal_unidades_caja": 5,
                                 "pal_etiqueta_negra": true
                             },
-                            "222222": {
-                                "pal_codigo": "222222",
+                            "483800000000654321": {
+                                "pal_codigo": "483800000000654321",
                                 "pal_sitpal": "ED",
                                 "pal_muelle": "10",
                                 "pal_articulo": "12346-0",
-                                "pal_unidades": 2000,
+                                "pal_cajas": 10,
+                                "pal_unidades_caja": 6,
                                 "pal_etiqueta_negra": false
                             }
                         },
                         "articulos": {
                             "12345-0": {
                                 art_codigo: "12345-0",
-                                art_pasill: "010",
-                                art_column: "015",
-                                art_altura: "1"
+                                art_denomi: "CONEJO CHOCO",
+                                cod_ubic: "010-015-1",
                             },
                             "12346-0": {
                                 art_codigo: "12346-0",
-                                art_pasill: "009",
-                                art_column: "020",
-                                art_altura: "1"
+                                art_denomi: "POLLO FRITO",
+                                cod_ubic: "009-020-1",
                             }
                         },
                         "ubic_picking": {
@@ -343,14 +478,19 @@
             methods: {
                 validaUsuario() {
                     if (this.usuario === this.password) {
-                        this.pantalla_actual = "elige_almacen"
+                        this.pantalla_actual = "menu_principal"
                     } else {
                         alert("Usuario incorrecto")
                     }
                 },
                 eligeAlmacen(codigo) {
                     this.almacen = codigo
-                    this.pantalla_actual = 'menu_principal'
+                    this.pantalla_actual = 'login'
+                },
+                salir() {
+                    if (confirm("¿Quieres salir del almacén?")) {
+                        this.pantalla_actual='login'
+                    }                    
                 },
                 asignacionAutomatica() {
                     //Ordenes de entrada
@@ -363,9 +503,15 @@
                             // this.baseDatos.paletas[paleta].pal_sitpal = "TR"                            
 
                             let orden = {
+                                "tipo_orden": "ENTRADA",
+                                "paleta1_muelle": "",
+                                "paleta2_muelle": "",
+                                "paleta1_muelle_candidata": this.baseDatos.paletas[paleta].pal_muelle,
+                                "paleta2_muelle_candidata": "",
                                 "muelle": this.baseDatos.paletas[paleta].pal_muelle,
-                                "paleta": paleta,
-                                "sitord": "PE"
+                                "pal_codigo": paleta,
+                                "destino": this.baseDatos.articulos[this.baseDatos.paletas[paleta].pal_articulo].cod_ubic,
+                                "destino_final": this.baseDatos.articulos[this.baseDatos.paletas[paleta].pal_articulo].cod_ubic
                             }
 
                             this.muelle = this.baseDatos.paletas[paleta].pal_muelle
@@ -380,12 +526,19 @@
                         }
                     }
 
-                    // if (result.length>0) {
-                    //     this.pantalla_actual = "entrada_paletas"
-
-                    // }
+                    if (this.pantalla_actual != "entrada_paletas") {
+                        alert("No hay órdenes")
+                    }
 
                     this.updateVisorBD()
+                },
+                gotoUbicar() {
+
+                    if (this.paleta1_muelle == "") {
+                        return alert("Escanea paleta del muelle indicado")
+                    }
+                    
+                    this.pantalla_actual='confirmar_ubicacion'
                 },
                 volverDeMuelleAPrincipal() {
                     this.pal_muelle = ""
@@ -394,7 +547,38 @@
                     this.paleta2_muelle = ""
                     this.paleta2_muelle_candidata = ""
                     this.pantalla_actual = "menu_principal"
+                    this.ubicacion_escaneada = ""
 
+                    this.limpiaOrden()
+                    this.updateVisorBD()
+
+                },
+                confirmarUbicacionEntrada() {
+                    if (this.ubicacion_escaneada === "") {
+                        return alert("Debe selecionar una ubicación válida")
+                    }
+                    this.baseDatos.paletas[this.baseDatos.orden.pal_codigo].pal_sitpal = 'UD'
+                    this.baseDatos.ubic_picking[this.baseDatos.orden.destino_final].cod_paleta = this.baseDatos.orden.pal_codigo
+                    this.baseDatos.ubic_picking[this.baseDatos.orden.destino_final].ubic_situacion = 'DO'
+
+                    this.limpiaOrden()
+
+                    this.volverDeMuelleAPrincipal()
+
+                    this.updateVisorBD()
+                },
+                limpiaOrden() {
+                    this.baseDatos.orden.tipo_orden = ""
+                    this.baseDatos.orden.paleta1_muelle = "",
+                    this.baseDatos.orden.paleta2_muelle = "",
+                    this.baseDatos.orden.paleta1_muelle_candidata = "",
+                    this.baseDatos.orden.paleta2_muelle_candidata = "",
+                    this.baseDatos.orden.muelle = "",
+                    this.baseDatos.orden.pal_codigo = "",
+                    this.baseDatos.orden.destino = "",
+                    this.baseDatos.orden.destino_final = ""
+
+                    this.updateVisorBD()
                 },
                 updateVisorBD() {
                     this.baseDatosJson = JSON.stringify(this.baseDatos, null, 4)
@@ -402,6 +586,7 @@
             },
             mounted() {
                 this.updateVisorBD()
+                this.limpiaOrden()
             },
             watch: {
                 baseDatosJson: function (newJson) {
